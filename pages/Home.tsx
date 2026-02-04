@@ -52,7 +52,7 @@ const Home: React.FC = () => {
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
             <Link to="/contact" className="px-10 py-5 rounded-full font-bold border-2 border-navy text-navy hover:bg-navy hover:text-white transition-all">
-              Contact Sales
+              Contact Us
             </Link>
           </div>
         </div>

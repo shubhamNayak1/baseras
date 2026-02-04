@@ -23,8 +23,12 @@ const Navbar: React.FC = () => {
     <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-navy py-4 shadow-xl' : 'bg-navy/95 py-6'}`}>
       <div className="container mx-auto px-6 flex justify-between items-center">
         <Link to="/" className="flex items-center space-x-2 group">
-          <div className="p-2 bg-teal rounded-lg group-hover:scale-110 transition-transform">
-            <Cpu className="w-6 h-6 text-white" />
+          <div className="rounded-lg group-hover:scale-110 transition-transform">
+            <img
+              src="/fav.png"
+              alt="BASERASTECH Logo"
+              className="w-6 h-6 object-contain"
+            />
           </div>
           <span className="text-xl font-bold tracking-tight text-white uppercase">BASERAS TECH</span>
         </Link>

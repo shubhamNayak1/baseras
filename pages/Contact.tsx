@@ -86,7 +86,7 @@ const Contact: React.FC = () => {
               </div>
 
               <form 
-                action={`https://formspree.io/f/mjkgjgyj`} 
+                action={`https://formspree.io/f/mnjzkywg`} 
                 method="POST" 
                 className="space-y-8"
                 onSubmit={() => setLoading(true)}
@@ -164,22 +164,6 @@ const Contact: React.FC = () => {
                         <Send className="w-5 h-5" />
                       </>
                     )}
-                  </button>
-
-                  <div className="flex items-center justify-center space-x-4">
-                    <div className="h-px bg-slate-200 flex-grow"></div>
-                    <span className="text-slate-400 text-xs font-black uppercase tracking-[0.2em]">Manual Option</span>
-                    <div className="h-px bg-slate-200 flex-grow"></div>
-                  </div>
-
-                  <button 
-                    type="button"
-                    onClick={handleManualEmail}
-                    className="w-full bg-white hover:bg-lightgray text-navy font-black py-5 rounded-2xl flex items-center justify-center space-x-3 border-2 border-navy transition-all active:scale-95"
-                  >
-                    <Mail className="w-5 h-5" />
-                    <span>Open Email Client</span>
-                    <ExternalLink className="w-4 h-4 ml-1 opacity-50" />
                   </button>
                 </div>
               </form>
