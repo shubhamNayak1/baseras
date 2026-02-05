@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle, ExternalLink, ShieldCheck } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle, ExternalLink, ShieldCheck , MessageCircle } from 'lucide-react';
 
 const Contact: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -53,15 +53,22 @@ const Contact: React.FC = () => {
               </div>
 
               <div className="p-8 bg-white border border-slate-100 rounded-[2rem]">
-                <div className="flex items-center space-x-5">
-                  <div className="p-4 bg-lightgray rounded-2xl">
-                    <MapPin className="w-8 h-8 text-teal" />
+                <a
+                    href="https://baserastech.com/whatsapp"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center space-x-3 text-slate-400 hover:text-green-400 transition-colors"
+                  >
+                  <div className="flex items-center space-x-5">
+                    <div className="p-4 bg-lightgray rounded-2xl">
+                      <MessageCircle className="w-8 h-8 text-teal" />
+                    </div>
+                    <div>
+                      <h4 className="font-black text-navy text-lg">Chat on WhatsApp</h4>
+                      <p className="text-slate-500 font-medium">We’re just a message away. Let’s talk.</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-black text-navy text-lg">HQ Location</h4>
-                    <p className="text-slate-500 font-medium">Registered Office, India</p>
-                  </div>
-                </div>
+                </a>
               </div>
             </div>
 
