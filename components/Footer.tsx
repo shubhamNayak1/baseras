@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Cpu, Mail, Globe, ShieldCheck } from 'lucide-react';
+import { Cpu, Mail, Globe, ShieldCheck, MessageCircle } from 'lucide-react';
+
 
 const Footer: React.FC = () => {
   return (
@@ -42,6 +43,18 @@ const Footer: React.FC = () => {
               <li className="flex items-center space-x-3 text-slate-400">
                 <Globe className="w-4 h-4 text-skyblue" />
                 <span className="font-medium">www.baserastech.com</span>
+              </li>
+              {/* WhatsApp */}
+              <li>
+                <a
+                  href="https://baserastech.com/whatsapp"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center space-x-3 text-slate-400 hover:text-green-400 transition-colors"
+                >
+                  <MessageCircle className="w-4 h-4 text-green-400" />
+                  <span className="font-medium">Chat on WhatsApp</span>
+                </a>
               </li>
             </ul>
           </div>
