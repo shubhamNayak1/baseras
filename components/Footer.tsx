@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Cpu, Mail, Globe, ShieldCheck, MessageCircle } from 'lucide-react';
+import { Cpu, Mail, Globe, ShieldCheck, MessageCircle , Notebook } from 'lucide-react';
 
 
 const Footer: React.FC = () => {
@@ -56,6 +56,17 @@ const Footer: React.FC = () => {
                   <span className="font-medium">Chat on WhatsApp</span>
                 </a>
               </li>
+              <li>
+              </li>
+              <a
+                href="https://www.linkedin.com/company/baserastech"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-3 text-slate-400 hover:text-blue-400 transition-colors"
+              >
+                <Notebook className="w-5 h-5 text-blue-500" />
+                <span className="font-medium">Follow us on LinkedIn</span>
+              </a>
             </ul>
           </div>
         </div>

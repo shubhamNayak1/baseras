@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle2, FlaskConical, GraduationCap, Dumbbell, ClipboardCheck, Rocket, Code2, Smartphone, Cpu, Settings, Headphones, Store } from 'lucide-react';
+import { ArrowRight, CheckCircle2, FlaskConical, GraduationCap, Pill, ClipboardCheck, Rocket, Code2, Smartphone, Cpu, Settings, Headphones, Store } from 'lucide-react';
 
 const Home: React.FC = () => {
   const scrollToSolutions = () => {
@@ -21,8 +21,7 @@ const Home: React.FC = () => {
   const industryVerticals = [
     { icon: FlaskConical, name: "Pharma & Biotech", color: "teal", desc: "Specialized in 21 CFR Part 11 compliance systems." },
     { icon: GraduationCap, name: "Edu-Tech Systems", color: "skyblue", desc: "Comprehensive management for modern campuses." },
-    { icon: Dumbbell, name: "Fitness & Wellness", color: "teal", desc: "Membership and biometric sync solutions." },
-    { icon: Store, name: "Retail & SME", color: "skyblue", desc: "Billing and inventory with automated GST compliance." }
+   { icon: Store, name: "Retail & SME", color: "skyblue", desc: "Billing and inventory with automated GST compliance." }
   ];
 
   return (
@@ -122,7 +121,7 @@ const Home: React.FC = () => {
             <h2 className="text-4xl font-black text-navy mb-4">Core Industry Specialization</h2>
             <p className="text-slate-500 font-medium text-lg">Deep domain knowledge for specialized software needs.</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {industryVerticals.map((ind, idx) => (
               <div key={idx} className="flex flex-col items-center p-12 bg-lightgray rounded-[2.5rem] border border-transparent hover:border-slate-200 hover:bg-white hover:shadow-xl transition-all group">
                 <ind.icon className={`w-14 h-14 text-${ind.color} mb-8 group-hover:scale-110 transition-transform`} />
@@ -149,28 +148,32 @@ const Home: React.FC = () => {
                 title: "Pharma eLogBook", 
                 color: "skyblue",
                 desc: "Validated digital logging system for pharmaceutical production. 21 CFR Part 11 compliant and audit-ready out of the box.",
-                features: ["Compliance Validated", "Full Audit Trail", "E-Signatures"]
+                features: ["Compliance Validated", "Full Audit Trail", "E-Signatures"],
+                link : "https://baserastech.com/#/"
               },
               { 
                 icon: ClipboardCheck, 
                 title: "GST Billing & Inventory", 
                 color: "teal",
                 desc: "Real-time stock tracking and automated GST compliance for distributors and retailers. Lightning fast and secure.",
-                features: ["Auto GST Filing", "Stock Thresholds", "Cloud Backup"]
+                features: ["Auto GST Filing", "Stock Thresholds", "Cloud Backup"],
+                link : "https://baserastech.com/#/"
               },
               { 
                 icon: GraduationCap, 
                 title: "EduCore School CMS", 
                 color: "skyblue",
                 desc: "A total campus management system connecting students, parents, and administrative staff seamlessly.",
-                features: ["Student Portals", "Fee Automation", "Virtual Classrooms"]
+                features: ["Student Portals", "Fee Automation", "Virtual Classrooms"],
+                link : "https://baserastech.com/#/"
               },
-              { 
-                icon: Dumbbell, 
-                title: "FlexGym Management", 
-                color: "teal",
-                desc: "Streamline memberships, trainer schedules, and biometric entries for high-traffic fitness centers.",
-                features: ["Biometric Sync", "Recurring Billing", "Member App"]
+              {
+                icon: Pill,
+                title: "Enterprise QMS",
+                color: "skyblue",
+                desc: "Comprehensive Quality Management System designed to streamline compliance, documentation, and training processes for regulated industries.",
+                features: ["QMS", "LMS / DMS", "Audit Trail / Report"],
+                link : "https://qms.baserastech.com/login"
               }
             ].map((p, idx) => (
               <div key={idx} className="group bg-white p-10 md:p-14 rounded-[3rem] border border-slate-200 hover:border-teal/30 transition-all flex flex-col h-full shadow-sm hover:shadow-xl">
@@ -180,8 +183,18 @@ const Home: React.FC = () => {
                   </div>
                   <h3 className="text-3xl font-black text-navy">{p.title}</h3>
                 </div>
-                <p className="text-slate-600 text-lg mb-10 leading-relaxed font-medium flex-grow">{p.desc}</p>
-                <div className="space-y-4">
+                <p className="text-slate-600 text-lg mb-10 leading-relaxed font-medium flex-grow">{p.desc}
+                  {" "}
+                  <a 
+                    href={p.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 font-semibold underline hover:text-blue-800 ml-2"
+                  >
+                    Try out...
+                  </a>
+                </p>
+             <div className="space-y-4">
                   {p.features.map(f => (
                     <div key={f} className="flex items-center space-x-3 text-navy font-bold">
                       <CheckCircle2 className={`w-6 h-6 text-${p.color}`} />
