@@ -165,7 +165,7 @@ const Home: React.FC = () => {
                 color: "skyblue",
                 desc: "A total campus management system connecting students, parents, and administrative staff seamlessly.",
                 features: ["Student Portals", "Fee Automation", "Virtual Classrooms"],
-                link : "https://baserastech.com/#/"
+                link : "https://college.baserastech.com/"
               },
               {
                 icon: Pill,
