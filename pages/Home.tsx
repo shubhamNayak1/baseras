@@ -149,7 +149,7 @@ const Home: React.FC = () => {
                 color: "skyblue",
                 desc: "Validated digital logging system for pharmaceutical production. 21 CFR Part 11 compliant and audit-ready out of the box.",
                 features: ["Compliance Validated", "Full Audit Trail", "E-Signatures"],
-                link : "https://logbook.baserastech.com/"
+                link : "https://log.baserastech.com/"
               },
               { 
                 icon: ClipboardCheck, 
