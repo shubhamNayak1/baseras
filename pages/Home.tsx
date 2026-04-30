@@ -157,7 +157,7 @@ const Home: React.FC = () => {
                 color: "teal",
                 desc: "Real-time stock tracking and automated GST compliance for distributors and retailers. Lightning fast and secure.",
                 features: ["Auto GST Filing", "Stock Thresholds", "Cloud Backup"],
-                link : "https://baserastech.com/#/"
+                link : "https://billing.baserastech.com/"
               },
               { 
                 icon: GraduationCap, 
