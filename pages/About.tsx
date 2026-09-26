@@ -7,11 +7,11 @@ const About: React.FC = () => {
       {/* Intro */}
       <section className="container mx-auto px-6 mb-32">
         <div className="max-w-4xl">
-          <span className="text-teal font-black tracking-widest uppercase text-xs mb-4 block">About the LLP</span>
+          <span className="text-teal font-black tracking-widest uppercase text-xs mb-4 block">About the Company</span>
           <h1 className="text-5xl md:text-7xl font-black text-navy mt-4 mb-10 leading-tight">Engineering Growth via Automation.</h1>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-slate-600 text-xl font-medium leading-relaxed">
             <p>
-              BASERAS TECH LLP is an IT services powerhouse focused on building automation-driven, reliable software for critical industries. 
+              BASERAS TECH PRIVATE LIMITED is an IT services powerhouse focused on building automation-driven, reliable software for critical industries. 
             </p>
             <p>
               Our name represents our DNA: <span className="text-teal font-bold italic">Business Automation & Software Engineering – Reliable Advanced System TECH.</span>

@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
               <div className="p-2 bg-teal rounded-lg">
                 <Cpu className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold tracking-tight uppercase">BASERAS TECH LLP</span>
+              <span className="text-xl font-bold tracking-tight uppercase">BASERAS TECH PRIVATE LIMITED</span>
             </Link>
             <p className="text-slate-300 max-w-sm mb-6 leading-relaxed">
               Reliable software engineering and business automation solutions. Specialized systems for Pharma, Education, and growing SMEs.
@@ -72,7 +72,7 @@ const Footer: React.FC = () => {
         </div>
 
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-slate-400">
-          <p>© {new Date().getFullYear()} BASERAS TECH LLP. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} BASERAS TECH PRIVATE LIMITED. All rights reserved.</p>
           <div className="flex space-x-8 mt-4 md:mt-0">
             <a href="#" className="hover:text-skyblue transition-colors">Privacy</a>
             <a href="#" className="hover:text-skyblue transition-colors">Terms</a>

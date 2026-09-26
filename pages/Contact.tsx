@@ -6,7 +6,7 @@ const Contact: React.FC = () => {
   const targetEmail = "ceo@baserastech.com";
 
   const handleManualEmail = () => {
-    const subject = encodeURIComponent("Business Inquiry: BASERAS TECH LLP");
+    const subject = encodeURIComponent("Business Inquiry: BASERAS TECH PRIVATE LIMITED");
     const body = encodeURIComponent("Hello BASERAS TECH Team,\n\nI am interested in your automation services. [Please add your details here].\n\nRegards,");
     window.location.href = `mailto:${targetEmail}?subject=${subject}&body=${body}`;
   };
