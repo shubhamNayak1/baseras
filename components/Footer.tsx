@@ -38,7 +38,7 @@ const Footer: React.FC = () => {
             <ul className="space-y-4">
               <li className="flex items-center space-x-3 text-slate-400">
                 <Mail className="w-4 h-4 text-skyblue" />
-                <span className="font-medium">ceo@baserastech.com</span>
+                <span className="font-medium">info@baserastech.com</span>
               </li>
               <li className="flex items-center space-x-3 text-slate-400">
                 <Globe className="w-4 h-4 text-skyblue" />

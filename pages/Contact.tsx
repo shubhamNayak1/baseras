@@ -3,7 +3,7 @@ import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle, ExternalLink, Shie
 
 const Contact: React.FC = () => {
   const [loading, setLoading] = useState(false);
-  const targetEmail = "ceo@baserastech.com";
+  const targetEmail = "info@baserastech.com";
 
   const handleManualEmail = () => {
     const subject = encodeURIComponent("Business Inquiry: BASERAS TECH PRIVATE LIMITED");
