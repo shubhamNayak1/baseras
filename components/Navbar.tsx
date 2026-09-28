@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Cpu } from 'lucide-react';
 
+const TOOLS_URL = 'https://baserastechtools.com/';
+
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -44,6 +46,14 @@ const Navbar: React.FC = () => {
               {link.name}
             </Link>
           ))}
+          <a
+            href={TOOLS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-semibold transition-colors text-slate-200 hover:text-skyblue"
+          >
+            Free Tools
+          </a>
         </div>
 
         {/* Mobile Button */}
@@ -66,6 +76,15 @@ const Navbar: React.FC = () => {
                 {link.name}
               </Link>
             ))}
+            <a
+              href={TOOLS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setIsOpen(false)}
+              className="text-lg font-bold text-white"
+            >
+              Free Tools
+            </a>
           </div>
         </div>
       )}

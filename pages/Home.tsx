@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle2, FlaskConical, GraduationCap, Pill, ClipboardCheck, Rocket, Code2, Smartphone, Cpu, Settings, Headphones, Store } from 'lucide-react';
+import { ArrowRight, CheckCircle2, FlaskConical, GraduationCap, Pill, ClipboardCheck, Rocket, Code2, Smartphone, Cpu, Settings, Headphones, Store, Calculator } from 'lucide-react';
 
 const Home: React.FC = () => {
   const scrollToSolutions = () => {
@@ -174,9 +174,18 @@ const Home: React.FC = () => {
                 desc: "Comprehensive Quality Management System designed to streamline compliance, documentation, and training processes for regulated industries.",
                 features: ["QMS", "LMS / DMS", "Audit Trail / Report"],
                 link : "https://qms.baserastech.com/login"
+              },
+              {
+                icon: Calculator,
+                title: "BASERASTECH India Tools",
+                color: "teal",
+                desc: "205+ free online calculators and tools for India: EMI, SIP, GST, income tax, salary, unit converters, developer utilities and more. Instant results, no sign-up.",
+                features: ["Finance & Tax Calculators", "Unit Converters", "Developer & Text Tools"],
+                link : "https://baserastechtools.com/",
+                wide: true
               }
             ].map((p, idx) => (
-              <div key={idx} className="group bg-white p-10 md:p-14 rounded-[3rem] border border-slate-200 hover:border-teal/30 transition-all flex flex-col h-full shadow-sm hover:shadow-xl">
+              <div key={idx} className={`${p.wide ? 'md:col-span-2 ' : ''}group bg-white p-10 md:p-14 rounded-[3rem] border border-slate-200 hover:border-teal/30 transition-all flex flex-col h-full shadow-sm hover:shadow-xl`}>
                 <div className="flex items-center space-x-5 mb-8">
                   <div className={`p-5 rounded-3xl bg-lightgray shadow-sm text-${p.color}`}>
                     <p.icon className="w-10 h-10" />
