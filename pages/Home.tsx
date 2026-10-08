@@ -173,7 +173,7 @@ const Home: React.FC = () => {
                 color: "skyblue",
                 desc: "Comprehensive Quality Management System designed to streamline compliance, documentation, and training processes for regulated industries.",
                 features: ["QMS", "LMS / DMS", "Audit Trail / Report"],
-                link : "https://qms.baserastech.com/login"
+                link : "https://qms.baserastech.com/"
               },
               {
                 icon: Calculator,
