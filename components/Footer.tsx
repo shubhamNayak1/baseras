@@ -1,22 +1,30 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Cpu, Mail, Globe, ShieldCheck, MessageCircle , Notebook } from 'lucide-react';
+import { scrollToSection } from './fx';
+
+const linkClass = "text-slate-400 hover:text-skyblue transition-colors font-medium";
+
+const otherProducts = [
+  { title: "GST Billing & Inventory", link: "https://billing.baserastech.com/" },
+  { title: "EduCore School CMS", link: "https://college.baserastech.com/" },
+  { title: "Free Online Tools", link: "https://baserastechtools.com/" }
+];
 
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-navy text-white pt-20 pb-10">
+    <footer className="relative z-10 bg-ink/90 backdrop-blur-sm text-white pt-20 pb-10 border-t border-white/10">
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-          <div className="col-span-1 md:col-span-2">
-            <Link to="/" className="flex items-center space-x-2 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-5 gap-10 xl:gap-12 mb-16">
+          <div className="col-span-1 sm:col-span-3 xl:col-span-2">
+            <button onClick={() => scrollToSection('top')} className="flex items-center space-x-2 mb-6 cursor-pointer text-left">
               <div className="p-2 bg-teal rounded-lg">
                 <Cpu className="w-5 h-5 text-white" />
               </div>
               <span className="text-xl font-bold tracking-tight uppercase">BASERAS TECH PRIVATE LIMITED</span>
-            </Link>
+            </button>
             <p className="text-slate-300 max-w-sm mb-6 leading-relaxed">
-              Reliable software engineering and business automation solutions. Specialized systems for Pharma, Education, and growing SMEs.
+              Pharma software for quality, production and field teams: Enterprise QMS + LMS + DMS, Pharma eLogbook and Field Pharma.
             </p>
             <div className="flex items-center space-x-3 text-skyblue">
               <ShieldCheck className="w-5 h-5" />
@@ -27,10 +35,18 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="text-white font-bold mb-8 uppercase text-sm tracking-widest">Navigation</h4>
             <ul className="space-y-4">
-              <li><Link to="/" className="text-slate-400 hover:text-skyblue transition-colors font-medium">Home</Link></li>
-              <li><Link to="/about" className="text-slate-400 hover:text-skyblue transition-colors font-medium">About Us</Link></li>
-              <li><Link to="/contact" className="text-slate-400 hover:text-skyblue transition-colors font-medium">Contact Us</Link></li>
-              <li><a href="https://baserastechtools.com/" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-skyblue transition-colors font-medium">Free Tools</a></li>
+              <li><button onClick={() => scrollToSection('products')} className={`${linkClass} cursor-pointer`}>Products</button></li>
+              <li><button onClick={() => scrollToSection('about')} className={`${linkClass} cursor-pointer`}>About Us</button></li>
+              <li><button onClick={() => scrollToSection('contact')} className={`${linkClass} cursor-pointer`}>Book a Demo</button></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-white font-bold mb-8 uppercase text-sm tracking-widest">Other Products</h4>
+            <ul className="space-y-4">
+              {otherProducts.map(o => (
+                <li key={o.link}><a href={o.link} target="_blank" rel="noopener noreferrer" className={linkClass}>{o.title}</a></li>
+              ))}
             </ul>
           </div>
 

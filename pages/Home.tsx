@@ -1,244 +1,267 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle2, FlaskConical, GraduationCap, Pill, ClipboardCheck, Rocket, Code2, Smartphone, Cpu, Settings, Headphones, Store, Calculator } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { Reveal, SpotlightCard, LiveConsole, scrollToSection } from '../components/fx';
+import AboutSection from '../components/AboutSection';
+import ContactSection from '../components/ContactSection';
+import { ArrowRight, CheckCircle2, FileCheck, BookOpenCheck, MapPinned, ShieldCheck, LockKeyhole, History, PenLine, Factory, FlaskConical, Dna, Building2, BriefcaseBusiness, Plug, CodeXml, Headphones, Sparkles, BadgeCheck } from 'lucide-react';
 
 const Home: React.FC = () => {
-  const scrollToSolutions = () => {
-    const element = document.getElementById('solutions');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+  const { pathname } = useLocation();
 
-  const coreServices = [
-    { icon: Code2, title: "Custom Software", desc: "Tailored applications built from the ground up to match your unique business processes." },
-    { icon: Smartphone, title: "Web Apps", desc: "Modern, responsive web applications using the latest frameworks for speed and reliability." },
-    { icon: Cpu, title: "Business Automation", desc: "End-to-end automation of manual workflows to reduce errors and save operational costs." },
-    { icon: Settings, title: "Compliance Systems", desc: "Systems designed specifically for audit trails, validation, and regulatory compliance (Pharma focus)." },
-    { icon: Headphones, title: "Maintenance", desc: "Ongoing 24/7 technical support and maintenance to keep your operations running smooth." }
+  // old /about and /contact links land on the matching section
+  useEffect(() => {
+    const id = pathname.replace('/', '');
+    if (id === 'about' || id === 'contact') {
+      const t = setTimeout(() => scrollToSection(id, false), 50);
+      return () => clearTimeout(t);
+    }
+  }, [pathname]);
+
+  const products = [
+    {
+      icon: FileCheck,
+      title: "Enterprise QMS + LMS + DMS",
+      color: "teal",
+      desc: "One connected platform for quality events, training and controlled documents. Manage deviations, CAPA and change control, keep training records current, and control SOPs with versioning and e-signatures.",
+      features: ["Deviations, CAPA & Change Control", "Training Records (LMS)", "Document Control (DMS)", "Audit Trail & Reports"],
+      link: "https://qms.baserastech.com/"
+    },
+    {
+      icon: BookOpenCheck,
+      title: "Pharma eLogbook",
+      color: "skyblue",
+      desc: "Replace paper logbooks on the shop floor. Record equipment usage, cleaning and production activities digitally, with every entry time-stamped, attributable and reviewable.",
+      features: ["Equipment & Cleaning Logs", "Full Audit Trail", "E-Signatures & Review", "ALCOA+ Data Integrity"],
+      link: "https://log.baserastech.com/"
+    },
+    {
+      icon: MapPinned,
+      title: "Field Pharma",
+      color: "teal",
+      desc: "Sales force automation for medical representatives. Plan doctor visits, submit daily call reports, track samples and gifts, capture orders, and give managers a live view of every territory.",
+      features: ["Doctor Visits & Daily Call Reports", "Sample & Gift Tracking", "Orders & Territory Management", "Manager Dashboards"],
+      link: null
+    }
   ];
 
-  const industryVerticals = [
-    { icon: FlaskConical, name: "Pharma & Biotech", color: "teal", desc: "Specialized in 21 CFR Part 11 compliance systems." },
-    { icon: GraduationCap, name: "Edu-Tech Systems", color: "skyblue", desc: "Comprehensive management for modern campuses." },
-   { icon: Store, name: "Retail & SME", color: "skyblue", desc: "Billing and inventory with automated GST compliance." }
+  const compliance = [
+    { icon: LockKeyhole, title: "US FDA 21 CFR Part 11", desc: "Electronic records and electronic signatures." },
+    { icon: ShieldCheck, title: "EU GMP Annex 11", desc: "Computerised systems in GMP environments." },
+    { icon: BriefcaseBusiness, title: "GAMP 5", desc: "Risk-based approach to GxP software." },
+    { icon: Factory, title: "Schedule M", desc: "Revised GMP requirements for Indian manufacturers." },
+    { icon: History, title: "ALCOA+", desc: "Attributable, legible, contemporaneous, original, accurate data." }
+  ];
+
+  const audiences = [
+    { icon: Factory, name: "Formulation Manufacturers", desc: "Tablets, capsules, injectables and other finished dosage plants." },
+    { icon: FlaskConical, name: "API Manufacturers", desc: "Bulk drug plants with heavy equipment and cleaning records." },
+    { icon: Building2, name: "CDMOs & Contract Manufacturers", desc: "Multi-client sites that face frequent customer audits." },
+    { icon: Dna, name: "Biotech & Pharma Marketing", desc: "Growing teams that need quality systems and field force tools." }
+  ];
+
+  const services = [
+    { icon: CodeXml, title: "Custom Pharma Software", desc: "Modules built around your plant's own workflows and SOPs." },
+    { icon: PenLine, title: "Validation Support", desc: "Help with requirement specifications and test scripts for your validation team." },
+    { icon: Plug, title: "Integrations", desc: "Connect with your existing ERP, LIMS and HR systems." },
+    { icon: Headphones, title: "Implementation & Support", desc: "Setup, data migration, user training and ongoing support." }
   ];
 
   return (
-    <div className="overflow-hidden">
+    <div className="overflow-hidden text-white">
       {/* Hero Section */}
-      <section className="relative pt-32 pb-24 md:pt-48 md:pb-40 px-6 bg-white overflow-hidden border-b border-slate-100">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-skyblue/5 blur-[120px] rounded-full -z-10"></div>
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-teal/5 blur-[120px] rounded-full -z-10"></div>
-        
-        <div className="container mx-auto text-center relative z-10">
-          <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-skyblue/10 border border-skyblue/20 text-skyblue font-bold text-xs uppercase tracking-widest mb-10 animate-in fade-in slide-in-from-bottom-4">
-            <Rocket className="w-4 h-4" />
-            <span>Scale with Engineering Excellence</span>
-          </div>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight mb-8 text-navy animate-in fade-in slide-in-from-bottom-8 duration-700">
-            Smart Software. <br /> <span className="text-teal">Real Results.</span>
-          </h1>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto mb-12 font-medium leading-relaxed animate-in fade-in slide-in-from-bottom-12 duration-700 delay-200">
-            Reliable, advanced systems engineered for Pharmaceutical, Education, and growing SME sectors. We automate the complex so you can grow faster.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-5 animate-in fade-in slide-in-from-bottom-16 duration-700 delay-300">
-            <button 
-              onClick={scrollToSolutions}
-              className="group bg-teal hover:bg-teal-hover text-white px-10 py-5 rounded-full font-bold flex items-center transition-all shadow-xl shadow-teal/20 cursor-pointer"
-            >
-              Explore Solutions
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
-            <Link to="/contact" className="px-10 py-5 rounded-full font-bold border-2 border-navy text-navy hover:bg-navy hover:text-white transition-all">
-              Contact Us
-            </Link>
-          </div>
+      <section id="top" className="relative min-h-[100svh] flex items-center pt-28 pb-20 md:pt-32 px-6 overflow-hidden">
+        <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-teal/20 blur-[140px] rounded-full pointer-events-none"></div>
+        <div className="absolute top-1/3 -right-40 w-[600px] h-[600px] bg-skyblue/15 blur-[140px] rounded-full pointer-events-none"></div>
+        <div className="absolute inset-x-0 bottom-0 h-[45%] overflow-hidden pointer-events-none">
+          <div className="grid-floor absolute inset-x-[-50%] top-0 h-[200%]"></div>
         </div>
-      </section>
 
-      {/* Trust Metrics */}
-      <section className="py-16 bg-navy text-white px-6">
-        <div className="container mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          <div>
-            <div className="text-4xl font-black text-skyblue mb-2">99%</div>
-            <div className="text-sm font-bold uppercase tracking-widest opacity-60">Uptime</div>
-          </div>
-          <div>
-            <div className="text-4xl font-black text-teal mb-2">15+</div>
-            <div className="text-sm font-bold uppercase tracking-widest opacity-60">Industries</div>
-          </div>
-          <div>
-            <div className="text-4xl font-black text-skyblue mb-2">24/7</div>
-            <div className="text-sm font-bold uppercase tracking-widest opacity-60">Support</div>
-          </div>
-          <div>
-            <div className="text-4xl font-black text-teal mb-2">Secure</div>
-            <div className="text-sm font-bold uppercase tracking-widest opacity-60">Compliance</div>
-          </div>
-        </div>
-      </section>
-
-      {/* Engineering Capabilities (Services Section) */}
-      <section id="services" className="py-32 px-6">
-        <div className="container mx-auto">
-          <div className="flex flex-col lg:flex-row items-end justify-between mb-20 gap-6">
-            <div className="max-w-2xl">
-              <span className="text-teal font-bold tracking-widest uppercase text-sm">Our Expertise</span>
-              <h2 className="text-4xl md:text-5xl font-black text-navy mt-4 leading-tight">Comprehensive Software Engineering.</h2>
-            </div>
-            <p className="text-slate-500 text-lg max-w-sm mb-2">We combine deep domain expertise with cutting-edge software architecture to solve real-world industry bottlenecks.</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {coreServices.map((s, idx) => (
-              <div key={idx} className="bg-white p-12 rounded-[2.5rem] border border-slate-200 hover:shadow-2xl hover:shadow-navy/5 transition-all group relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-skyblue/5 rounded-full translate-x-16 -translate-y-16 group-hover:scale-150 transition-transform"></div>
-                <div className="p-4 bg-lightgray rounded-2xl w-fit mb-8 group-hover:bg-teal group-hover:text-white transition-colors">
-                  <s.icon className="w-8 h-8 text-teal group-hover:text-white" />
-                </div>
-                <h3 className="text-2xl font-black text-navy mb-4">{s.title}</h3>
-                <p className="text-slate-500 leading-relaxed font-medium">{s.desc}</p>
+        <div className="container mx-auto relative z-10 grid xl:grid-cols-2 gap-14 xl:gap-16 items-center">
+          <div className="text-center xl:text-left min-w-0">
+            <Reveal>
+              <h1 className="font-display text-5xl md:text-7xl min-[1400px]:text-8xl font-bold tracking-tight leading-[1.02] mb-8">
+                Pharma Software.<br />
+                <span className="text-gradient">Built for Compliance.</span>
+              </h1>
+            </Reveal>
+            <Reveal delay={150}>
+              <p className="text-xl text-slate-300 max-w-xl mx-auto xl:mx-0 mb-12 font-medium leading-relaxed">
+                Quality, production and field force software for pharmaceutical manufacturers.
+              </p>
+            </Reveal>
+            <Reveal delay={300}>
+              <div className="flex flex-col sm:flex-row items-center justify-center xl:justify-start gap-5">
+                <button onClick={() => scrollToSection('contact')} className="group relative cursor-pointer bg-teal hover:bg-teal-hover text-white px-10 py-5 rounded-full font-bold flex items-center whitespace-nowrap transition-all shadow-[0_0_40px_-5px_rgba(31,182,166,.7)] hover:shadow-[0_0_60px_-5px_rgba(31,182,166,.9)]">
+                  Request a Demo
+                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </button>
+                <button
+                  onClick={() => scrollToSection('products')}
+                  className="px-10 py-5 rounded-full font-bold whitespace-nowrap glass text-white hover:bg-white/10 transition-all cursor-pointer"
+                >
+                  Explore Products
+                </button>
               </div>
-            ))}
-            
-            <div className="bg-navy p-12 rounded-[2.5rem] flex flex-col justify-center text-white relative overflow-hidden shadow-2xl">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-teal/20 blur-3xl rounded-full"></div>
-              <h3 className="text-2xl font-black mb-4 relative z-10">Custom Project?</h3>
-              <p className="mb-8 text-slate-300 font-medium relative z-10">We specialize in solving unique logic challenges that standard software can't handle.</p>
-              <Link to="/contact" className="bg-teal hover:bg-teal-hover text-white px-8 py-4 rounded-full font-black text-center relative z-10 shadow-lg shadow-teal/30 transition-all active:scale-95">
-                Start Inquiry
-              </Link>
+            </Reveal>
+          </div>
+
+          <Reveal delay={250} className="relative min-w-0 w-full max-w-2xl mx-auto xl:max-w-none">
+            <div className="float-y">
+              <LiveConsole />
             </div>
-          </div>
+            <div className="hidden xl:flex absolute -left-8 -bottom-8 glass rounded-2xl px-4 py-3 items-center gap-3 shadow-xl float-y" style={{ animationDelay: '-2s' }}>
+              <BadgeCheck className="w-5 h-5 text-teal" />
+              <span className="text-sm font-semibold">e-Signature verified</span>
+            </div>
+            <div className="hidden xl:flex absolute -right-6 -top-6 glass rounded-2xl px-4 py-3 items-center gap-3 shadow-xl float-y" style={{ animationDelay: '-4s' }}>
+              <Sparkles className="w-5 h-5 text-skyblue" />
+              <span className="text-sm font-semibold">ALCOA+ data integrity</span>
+            </div>
+          </Reveal>
         </div>
       </section>
 
-      {/* Industry Verticals Section */}
-      <section className="bg-white py-32 px-6 border-y border-slate-100">
-        <div className="container mx-auto">
-          <div className="text-center mb-20">
-            <span className="text-skyblue font-bold tracking-widest uppercase text-xs mb-3 block">Verticals</span>
-            <h2 className="text-4xl font-black text-navy mb-4">Core Industry Specialization</h2>
-            <p className="text-slate-500 font-medium text-lg">Deep domain knowledge for specialized software needs.</p>
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {industryVerticals.map((ind, idx) => (
-              <div key={idx} className="flex flex-col items-center p-12 bg-lightgray rounded-[2.5rem] border border-transparent hover:border-slate-200 hover:bg-white hover:shadow-xl transition-all group">
-                <ind.icon className={`w-14 h-14 text-${ind.color} mb-8 group-hover:scale-110 transition-transform`} />
-                <span className="font-black text-navy text-xl text-center uppercase tracking-tight mb-4">{ind.name}</span>
-                <p className="text-slate-500 text-sm text-center font-medium leading-relaxed">{ind.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Products Section */}
+      <section id="products" className="relative py-16 md:py-24 px-6">
+        <div className="absolute inset-0 dot-grid opacity-60 pointer-events-none"></div>
+        <div className="container mx-auto relative">
+          <Reveal className="text-center mb-14">
+            <span className="text-skyblue font-bold tracking-[0.3em] uppercase text-xs">Our Products</span>
+            <h2 className="font-display text-4xl md:text-6xl font-bold mt-4">Three Platforms. <span className="text-gradient">One Pharma Focus.</span></h2>
+            <p className="text-slate-400 font-medium text-lg mt-6 max-w-2xl mx-auto">From the quality department to the production floor to the field, each product solves one core pharma workflow.</p>
+          </Reveal>
 
-      {/* Solutions Portfolio Section */}
-      <section id="solutions" className="py-32 px-6 bg-lightgray relative">
-        <div className="container mx-auto">
-          <div className="text-center mb-24">
-            <span className="text-skyblue font-bold tracking-widest uppercase text-sm">Portfolio</span>
-            <h2 className="text-4xl md:text-6xl font-black text-navy mt-4">Industry-Ready Platforms.</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {[
-              { 
-                icon: FlaskConical, 
-                title: "Pharma eLogBook", 
-                color: "skyblue",
-                desc: "Validated digital logging system for pharmaceutical production. 21 CFR Part 11 compliant and audit-ready out of the box.",
-                features: ["Compliance Validated", "Full Audit Trail", "E-Signatures"],
-                link : "https://log.baserastech.com/"
-              },
-              { 
-                icon: ClipboardCheck, 
-                title: "GST Billing & Inventory", 
-                color: "teal",
-                desc: "Real-time stock tracking and automated GST compliance for distributors and retailers. Lightning fast and secure.",
-                features: ["Auto GST Filing", "Stock Thresholds", "Cloud Backup"],
-                link : "https://billing.baserastech.com/"
-              },
-              { 
-                icon: GraduationCap, 
-                title: "EduCore School CMS", 
-                color: "skyblue",
-                desc: "A total campus management system connecting students, parents, and administrative staff seamlessly.",
-                features: ["Student Portals", "Fee Automation", "Virtual Classrooms"],
-                link : "https://college.baserastech.com/"
-              },
-              {
-                icon: Pill,
-                title: "Enterprise QMS",
-                color: "skyblue",
-                desc: "Comprehensive Quality Management System designed to streamline compliance, documentation, and training processes for regulated industries.",
-                features: ["QMS", "LMS / DMS", "Audit Trail / Report"],
-                link : "https://qms.baserastech.com/"
-              },
-              {
-                icon: Calculator,
-                title: "BASERASTECH India Tools",
-                color: "teal",
-                desc: "205+ free online calculators and tools for India: EMI, SIP, GST, income tax, salary, unit converters, developer utilities and more. Instant results, no sign-up.",
-                features: ["Finance & Tax Calculators", "Unit Converters", "Developer & Text Tools"],
-                link : "https://baserastechtools.com/",
-                wide: true
-              }
-            ].map((p, idx) => (
-              <div key={idx} className={`${p.wide ? 'md:col-span-2 ' : ''}group bg-white p-10 md:p-14 rounded-[3rem] border border-slate-200 hover:border-teal/30 transition-all flex flex-col h-full shadow-sm hover:shadow-xl`}>
-                <div className="flex items-center space-x-5 mb-8">
-                  <div className={`p-5 rounded-3xl bg-lightgray shadow-sm text-${p.color}`}>
-                    <p.icon className="w-10 h-10" />
-                  </div>
-                  <h3 className="text-3xl font-black text-navy">{p.title}</h3>
-                </div>
-                <p className="text-slate-600 text-lg mb-10 leading-relaxed font-medium flex-grow">{p.desc}
-                  {" "}
-                  <a 
-                    href={p.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 font-semibold underline hover:text-blue-800 ml-2"
-                  >
-                    Try out...
-                  </a>
-                </p>
-             <div className="space-y-4">
-                  {p.features.map(f => (
-                    <div key={f} className="flex items-center space-x-3 text-navy font-bold">
-                      <CheckCircle2 className={`w-6 h-6 text-${p.color}`} />
-                      <span>{f}</span>
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+            {products.map((p, idx) => (
+              <Reveal key={idx} delay={idx * 150} className="h-full">
+                <SpotlightCard className="group rounded-[2rem] p-8 md:p-10 flex flex-col h-full transition-transform duration-500 hover:-translate-y-2">
+                  <div className="flex items-start justify-between mb-8">
+                    <div className="relative">
+                      <div className={`absolute inset-0 bg-${p.color} blur-2xl opacity-30 group-hover:opacity-60 transition-opacity`}></div>
+                      <div className={`relative p-4 rounded-2xl bg-white/5 border border-white/10 text-${p.color}`}>
+                        <p.icon className="w-9 h-9" />
+                      </div>
                     </div>
-                  ))}
-                </div>
-              </div>
+                    <span className="num-outline font-display text-6xl font-bold leading-none">0{idx + 1}</span>
+                  </div>
+                  <h3 className="font-display text-3xl font-bold mb-5">{p.title}</h3>
+                  <p className="text-slate-400 text-base mb-8 leading-relaxed">{p.desc}</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-1 gap-3 mb-10 flex-grow content-start">
+                    {p.features.map(f => (
+                      <div key={f} className="flex items-start space-x-3 text-slate-200 font-semibold text-sm">
+                        <CheckCircle2 className={`w-5 h-5 shrink-0 text-${p.color}`} />
+                        <span>{f}</span>
+                      </div>
+                    ))}
+                  </div>
+                  {p.link ? (
+                    <a
+                      href={p.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group/btn flex items-center justify-center gap-2 border border-white/15 hover:border-teal hover:bg-teal/10 text-white px-8 py-4 rounded-full font-bold transition-all"
+                    >
+                      Try It Out
+                      <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                    </a>
+                  ) : (
+                    <button onClick={() => scrollToSection('contact')} className="group/btn cursor-pointer flex items-center justify-center gap-2 bg-teal hover:bg-teal-hover text-white px-8 py-4 rounded-full font-bold transition-all shadow-[0_0_30px_-8px_rgba(31,182,166,.8)]">
+                      Request a Demo
+                      <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                    </button>
+                  )}
+                </SpotlightCard>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-32 px-6">
+      {/* Compliance Section */}
+      <section className="relative py-16 md:py-24 bg-deep/60 border-y border-white/5 overflow-hidden">
+        <div className="absolute left-1/2 top-0 -translate-x-1/2 w-[800px] h-[300px] bg-teal/10 blur-[120px] rounded-full pointer-events-none"></div>
+        <Reveal className="text-center mb-12 px-6 relative">
+          <span className="text-skyblue font-bold tracking-[0.3em] uppercase text-xs">Compliance by Design</span>
+          <h2 className="font-display text-4xl md:text-5xl font-bold mt-4 max-w-4xl mx-auto">Designed to support the regulations you are audited against.</h2>
+        </Reveal>
+
+        <div className="marquee relative mb-12 [mask-image:linear-gradient(to_right,transparent,#000_10%,#000_90%,transparent)]">
+          <div className="marquee-track flex w-max gap-4">
+            {[...compliance, ...compliance, ...compliance, ...compliance].map((c, idx) => (
+              <div key={idx} className="flex items-center gap-3 glass rounded-full px-6 py-3 whitespace-nowrap">
+                <c.icon className="w-5 h-5 text-teal" />
+                <span className="font-display font-semibold">{c.title}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="container mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-5 relative">
+          {compliance.map((c, idx) => (
+            <Reveal key={idx} delay={idx * 100} className={`h-full ${idx === compliance.length - 1 ? 'sm:col-span-2 xl:col-span-1' : ''}`}>
+              <SpotlightCard className="h-full p-7 rounded-[1.5rem] text-center">
+                <c.icon className="w-9 h-9 text-teal mx-auto mb-4" />
+                <div className="font-display font-bold text-lg mb-2">{c.title}</div>
+                <p className="text-sm text-slate-400">{c.desc}</p>
+              </SpotlightCard>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* Who We Serve Section */}
+      <section className="relative py-16 md:py-24 px-6">
         <div className="container mx-auto">
-          <div className="bg-navy rounded-[4rem] p-12 md:p-24 text-center relative overflow-hidden shadow-2xl shadow-navy/20">
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-teal/10 blur-[100px] rounded-full translate-x-1/4 -translate-y-1/4"></div>
-            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-skyblue/10 blur-[100px] rounded-full -translate-x-1/4 translate-y-1/4"></div>
-            
-            <h2 className="text-4xl md:text-6xl font-black mb-8 text-white relative z-10 leading-tight">Ready to build your <br className="hidden md:block" /> future system?</h2>
-            <p className="text-xl text-slate-300 mb-12 max-w-2xl mx-auto font-medium relative z-10">
-              Get in touch with our engineering team today for a comprehensive consultation and project roadmap.
-            </p>
-            <div className="relative z-10 flex flex-col sm:flex-row items-center justify-center gap-6">
-              <Link to="/contact" className="bg-teal hover:bg-teal-hover text-white px-12 py-6 rounded-full font-black text-xl transition-all shadow-xl shadow-teal/20 active:scale-95">
-                Start Consultation
-              </Link>
-              <Link to="/about" className="text-white hover:text-skyblue transition-colors font-bold text-lg underline underline-offset-8">
-                More About Our Team
-              </Link>
-            </div>
+          <Reveal className="text-center mb-12 max-w-2xl mx-auto">
+            <span className="text-teal font-bold tracking-[0.3em] uppercase text-xs mb-3 block">Who We Serve</span>
+            <h2 className="font-display text-4xl md:text-5xl font-bold mb-4">Built for Pharma Teams in India and Abroad</h2>
+            <p className="text-slate-400 font-medium text-lg">For Indian manufacturers serving domestic and export markets.</p>
+          </Reveal>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {audiences.map((a, idx) => (
+              <Reveal key={idx} delay={idx * 100} className="h-full">
+                <SpotlightCard className="group h-full flex flex-col items-center p-8 rounded-[2rem] transition-transform duration-500 hover:-translate-y-1">
+                  <div className="p-4 rounded-2xl bg-teal/10 mb-6 group-hover:scale-110 group-hover:bg-teal/20 transition-all">
+                    <a.icon className="w-9 h-9 text-teal" />
+                  </div>
+                  <span className="font-display font-bold text-lg text-center mb-3">{a.name}</span>
+                  <p className="text-slate-400 text-sm text-center leading-relaxed">{a.desc}</p>
+                </SpotlightCard>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
+
+      {/* Services Section */}
+      <section id="services" className="relative py-16 md:py-24 px-6 bg-deep/60 border-y border-white/5">
+        <div className="container mx-auto">
+          <Reveal className="flex flex-col lg:flex-row items-start lg:items-end justify-between mb-12 gap-6">
+            <div className="max-w-2xl">
+              <span className="text-teal font-bold tracking-[0.3em] uppercase text-xs">Services</span>
+              <h2 className="font-display text-4xl md:text-5xl font-bold mt-4 leading-tight">Beyond the Software.</h2>
+            </div>
+            <p className="text-slate-400 text-lg max-w-sm mb-2">We help you set up, adapt and run our products inside your regulated environment.</p>
+          </Reveal>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+            {services.map((s, idx) => (
+              <Reveal key={idx} delay={idx * 100} className="h-full">
+                <SpotlightCard className="group h-full p-8 rounded-[2rem]">
+                  <div className="p-4 bg-white/5 border border-white/10 rounded-2xl w-fit mb-7 group-hover:bg-teal group-hover:border-teal transition-colors">
+                    <s.icon className="w-7 h-7 text-teal group-hover:text-white transition-colors" />
+                  </div>
+                  <h3 className="font-display text-2xl font-bold mb-3">{s.title}</h3>
+                  <p className="text-slate-400 leading-relaxed">{s.desc}</p>
+                </SpotlightCard>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <AboutSection />
+
+      <ContactSection />
     </div>
   );
 };

@@ -1,75 +1,94 @@
 import React from 'react';
 import { Target, Eye, ShieldCheck, Heart, Zap, Search } from 'lucide-react';
+import { Reveal, SpotlightCard } from './fx';
 
-const About: React.FC = () => {
+const principles = [
+  { icon: ShieldCheck, title: "Compliance First", desc: "Audit trails, e-signatures and data integrity are built in from the start, not added later." },
+  { icon: Heart, title: "Simplicity", desc: "Screens that operators, QA staff and medical reps can use with minimal training." },
+  { icon: Zap, title: "Pharma Focus", desc: "We work only in pharma, so our products follow how your teams actually work." },
+  { icon: Search, title: "Data Security", desc: "Role-based access and secure handling of your quality and commercial data." }
+];
+
+const AboutSection: React.FC = () => {
   return (
-    <div className="pt-32 pb-24">
-      {/* Intro */}
-      <section className="container mx-auto px-6 mb-32">
-        <div className="max-w-4xl">
-          <span className="text-teal font-black tracking-widest uppercase text-xs mb-4 block">About the Company</span>
-          <h1 className="text-5xl md:text-7xl font-black text-navy mt-4 mb-10 leading-tight">Engineering Growth via Automation.</h1>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-slate-600 text-xl font-medium leading-relaxed">
-            <p>
-              BASERAS TECH PRIVATE LIMITED is an IT services powerhouse focused on building automation-driven, reliable software for critical industries. 
-            </p>
-            <p>
-              Our name represents our DNA: <span className="text-teal font-bold italic">Business Automation & Software Engineering – Reliable Advanced System TECH.</span>
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Mission & Vision */}
-      <section className="bg-white py-32 mb-32 border-y border-slate-100 relative">
-        <div className="absolute top-1/2 left-0 -translate-y-1/2 w-64 h-64 bg-teal/5 blur-[100px] rounded-full"></div>
-        <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-20">
-          <div className="flex flex-col items-center md:items-start text-center md:text-left">
-            <div className="p-6 bg-teal/10 rounded-[2rem] mb-8">
-              <Target className="w-12 h-12 text-teal" />
-            </div>
-            <h2 className="text-4xl font-black text-navy mb-6">Our Mission</h2>
-            <p className="text-slate-600 text-lg font-medium leading-relaxed">
-              To dismantle operational inefficiency using high-speed engineering and intelligent automation tools.
-            </p>
-          </div>
-          <div className="flex flex-col items-center md:items-start text-center md:text-left">
-            <div className="p-6 bg-skyblue/10 rounded-[2rem] mb-8">
-              <Eye className="w-12 h-12 text-skyblue" />
-            </div>
-            <h2 className="text-4xl font-black text-navy mb-6">Our Vision</h2>
-            <p className="text-slate-600 text-lg font-medium leading-relaxed">
-              To be the globally recognized standard for software systems in regulated and mission-critical service sectors.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Values */}
-      <section className="container mx-auto px-6">
-        <div className="text-center mb-20">
-          <h2 className="text-4xl font-black text-navy mb-4">Core Principles</h2>
-          <p className="text-slate-500 font-medium">What drives us to build better software every day.</p>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {[
-            { icon: ShieldCheck, title: "Reliability", desc: "Software that never stops working, ensuring your business stays active 24/7." },
-            { icon: Heart, title: "Simplicity", desc: "Complex problems solved with incredibly simple and clean user experiences." },
-            { icon: Zap, title: "Innovation", desc: "We stay at the edge of the stack to give your business an engineering advantage." },
-            { icon: Search, title: "Security", desc: "Enterprise-level protection for your most sensitive operational data." }
-          ].map((value, idx) => (
-            <div key={idx} className="bg-white p-10 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-teal/5 transition-all text-center group">
-              <div className="p-4 bg-lightgray rounded-2xl w-fit mx-auto mb-8 group-hover:bg-navy group-hover:text-white transition-colors">
-                <value.icon className="w-8 h-8 text-teal group-hover:text-skyblue" />
+    <section id="about" className="relative py-16 md:py-24 px-6 overflow-hidden">
+      <div className="absolute -left-40 top-1/4 w-[500px] h-[500px] bg-teal/10 blur-[140px] rounded-full pointer-events-none"></div>
+      <div className="container mx-auto relative">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center mb-12">
+          {/* Intro */}
+          <div className="min-w-0">
+            <Reveal>
+              <span className="text-teal font-bold tracking-[0.3em] uppercase text-xs mb-4 block">About Us</span>
+              <h2 className="font-display text-4xl md:text-6xl font-bold mt-4 mb-8 leading-[1.05]">
+                Software Built <span className="text-gradient">for Pharma.</span>
+              </h2>
+            </Reveal>
+            <Reveal delay={150}>
+              <div className="space-y-5 text-slate-300 text-lg leading-relaxed">
+                <p>
+                  BASERAS TECH PRIVATE LIMITED is a pharma software company. We build quality management, eLogbook and field force software for pharmaceutical manufacturers in India and for companies serving export markets.
+                </p>
+                <p>
+                  We focus on one industry so we can understand its workflows and regulations deeply: <span className="text-teal font-semibold">compliance-ready software for every pharma team, from the quality department to the field.</span>
+                </p>
               </div>
-              <h3 className="text-2xl font-black text-navy mb-4">{value.title}</h3>
-              <p className="text-slate-500 font-medium">{value.desc}</p>
-            </div>
+            </Reveal>
+          </div>
+
+          {/* Mission & Vision */}
+          <div className="grid grid-cols-1 gap-5 min-w-0">
+            <Reveal delay={100}>
+              <SpotlightCard className="rounded-[2rem] p-8 flex gap-6 items-start">
+                <div className="relative shrink-0">
+                  <div className="absolute inset-0 bg-teal blur-2xl opacity-30"></div>
+                  <div className="relative p-4 bg-teal/10 border border-teal/20 rounded-2xl">
+                    <Target className="w-8 h-8 text-teal" />
+                  </div>
+                </div>
+                <div>
+                  <h3 className="font-display text-2xl font-bold mb-2">Our Mission</h3>
+                  <p className="text-slate-400 leading-relaxed">
+                    To help pharma companies move from paper to reliable digital systems that are simple to use and ready for audits.
+                  </p>
+                </div>
+              </SpotlightCard>
+            </Reveal>
+            <Reveal delay={250}>
+              <SpotlightCard className="rounded-[2rem] p-8 flex gap-6 items-start">
+                <div className="relative shrink-0">
+                  <div className="absolute inset-0 bg-skyblue blur-2xl opacity-30"></div>
+                  <div className="relative p-4 bg-skyblue/10 border border-skyblue/20 rounded-2xl">
+                    <Eye className="w-8 h-8 text-skyblue" />
+                  </div>
+                </div>
+                <div>
+                  <h3 className="font-display text-2xl font-bold mb-2">Our Vision</h3>
+                  <p className="text-slate-400 leading-relaxed">
+                    To be the trusted software partner for pharmaceutical manufacturers in India and the markets they serve.
+                  </p>
+                </div>
+              </SpotlightCard>
+            </Reveal>
+          </div>
+        </div>
+
+        {/* Core Principles */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {principles.map((value, idx) => (
+            <Reveal key={idx} delay={idx * 100} className="h-full">
+              <SpotlightCard className="group h-full p-7 rounded-[1.5rem]">
+                <div className="p-3 bg-white/5 border border-white/10 rounded-xl w-fit mb-5 group-hover:bg-teal group-hover:border-teal transition-colors">
+                  <value.icon className="w-6 h-6 text-teal group-hover:text-white transition-colors" />
+                </div>
+                <h3 className="font-display text-xl font-bold mb-2">{value.title}</h3>
+                <p className="text-slate-400 text-sm leading-relaxed">{value.desc}</p>
+              </SpotlightCard>
+            </Reveal>
           ))}
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   );
 };
 
-export default About;
+export default AboutSection;

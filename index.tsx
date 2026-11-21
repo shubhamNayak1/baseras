@@ -3,6 +3,12 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 
+// Always start at the top on reload instead of restoring the old scroll position
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
+window.scrollTo(0, 0);
+
 const rootElement = document.getElementById('root');
 if (!rootElement) {
   throw new Error("Could not find root element to mount to");

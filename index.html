@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="/fav.png" />
-    <title>BASERAS TECH PRIVATE LIMITED | Business Automation & Software Engineering</title>
-    <meta name="description" content="BASERASTECH PRIVATE LIMITED provides pharma eLogbook, GST billing, school, gym and business automation software solutions." />
+    <title>BASERAS TECH | Pharma Software: QMS, eLogbook &amp; Field Force Automation</title>
+    <meta name="description" content="BASERAS TECH PRIVATE LIMITED builds pharma software: Enterprise QMS + LMS + DMS, Pharma eLogbook and Field Pharma sales force automation." />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -19,16 +19,118 @@
               },
               skyblue: '#38BDF8',
               lightgray: '#F5F7FA',
+              ink: '#050B18',
+              deep: '#08162B',
+            },
+            fontFamily: {
+              display: ['"Space Grotesk"', 'Inter', 'sans-serif'],
             }
           }
         }
       }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
       body {
         font-family: 'Inter', sans-serif;
         scroll-behavior: smooth;
+      }
+
+      /* ---------- Motion system ---------- */
+      @keyframes gradient-pan { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+      @keyframes float-y { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+      @keyframes grid-scroll { from { background-position: 0 0; } to { background-position: 0 64px; } }
+      @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+      @keyframes spin-slow { to { transform: rotate(360deg); } }
+      @keyframes pulse-dot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .4; transform: scale(.7); } }
+      @keyframes scan { from { transform: translateY(-100%); } to { transform: translateY(400%); } }
+      @keyframes row-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+      .text-gradient {
+        background: linear-gradient(90deg, #1FB6A6, #38BDF8, #818CF8, #1FB6A6);
+        background-size: 200% auto;
+        -webkit-background-clip: text; background-clip: text; color: transparent;
+        animation: gradient-pan 6s linear infinite;
+      }
+      .float-y { animation: float-y 6s ease-in-out infinite; }
+      .pulse-dot { animation: pulse-dot 1.6s ease-in-out infinite; }
+      .row-in { animation: row-in .5s ease-out both; }
+      .marquee-track { animation: marquee 40s linear infinite; }
+      .marquee:hover .marquee-track { animation-play-state: paused; }
+
+      /* perspective grid floor */
+      .grid-floor {
+        background-image:
+          linear-gradient(rgba(56,189,248,.13) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(56,189,248,.13) 1px, transparent 1px);
+        background-size: 64px 64px;
+        transform: perspective(500px) rotateX(62deg);
+        transform-origin: center top;
+        animation: grid-scroll 3s linear infinite;
+        -webkit-mask-image: linear-gradient(to bottom, transparent, #000 30%, #000 60%, transparent);
+        mask-image: linear-gradient(to bottom, transparent, #000 30%, #000 60%, transparent);
+      }
+      .dot-grid {
+        background-image: radial-gradient(rgba(148,163,184,.18) 1px, transparent 1px);
+        background-size: 28px 28px;
+      }
+
+      /* glass card with mouse-follow spotlight + glowing edge */
+      .glass {
+        background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+        border: 1px solid rgba(255,255,255,.09);
+        -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+      }
+      .spotlight { position: relative; isolation: isolate; }
+      .spotlight::before {
+        content: ''; position: absolute; inset: 0; border-radius: inherit; z-index: -1; pointer-events: none;
+        background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(31,182,166,.16), transparent 45%);
+        opacity: 0; transition: opacity .3s;
+      }
+      .spotlight::after {
+        content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; pointer-events: none;
+        background: radial-gradient(300px circle at var(--mx, 50%) var(--my, 50%), rgba(56,189,248,.8), transparent 50%);
+        -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor; mask-composite: exclude;
+        opacity: 0; transition: opacity .3s;
+      }
+      .spotlight:hover::before, .spotlight:hover::after { opacity: 1; }
+
+      /* rotating conic border for the CTA */
+      .conic-border { position: relative; overflow: hidden; }
+      .conic-border::before {
+        content: ''; position: absolute; inset: -150%; z-index: 0;
+        background: conic-gradient(from 0deg, transparent 0 70%, #1FB6A6 80%, #38BDF8 90%, transparent 100%);
+        animation: spin-slow 6s linear infinite;
+      }
+      .conic-border > .conic-inner { position: relative; z-index: 1; }
+
+      .scanline { animation: scan 4s linear infinite; }
+
+      /* outlined card numbers (01, 02, 03) that fill with the brand gradient on hover */
+      .num-outline {
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+        -webkit-text-stroke: 1.5px rgba(56,189,248,.75);
+        background-image: linear-gradient(135deg, #1FB6A6, #38BDF8);
+        background-size: 0% 100%;
+        background-repeat: no-repeat;
+        -webkit-background-clip: text; background-clip: text;
+        filter: drop-shadow(0 0 10px rgba(56,189,248,.3));
+        transition: background-size .6s cubic-bezier(.2,.7,.2,1), filter .4s;
+      }
+      .group:hover .num-outline {
+        background-size: 100% 100%;
+        filter: drop-shadow(0 0 18px rgba(56,189,248,.6));
+      }
+
+      /* scroll reveal */
+      .reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); }
+      .reveal.is-visible { opacity: 1; transform: none; }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+        .reveal { opacity: 1; transform: none; }
       }
     </style>
   <script type="importmap">
