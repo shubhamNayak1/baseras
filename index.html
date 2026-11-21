@@ -128,6 +128,12 @@
       .reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); }
       .reveal.is-visible { opacity: 1; transform: none; }
 
+      /* phones/tablets: skip the costly frosted blur over the animated background, and fade in faster */
+      @media (max-width: 1023px) {
+        .glass { -webkit-backdrop-filter: none; backdrop-filter: none; background: linear-gradient(180deg, rgba(16,32,56,.92), rgba(10,22,40,.92)); }
+        .reveal { transform: translateY(16px); transition-duration: .45s; }
+      }
+
       @media (prefers-reduced-motion: reduce) {
         *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
         .reveal { opacity: 1; transform: none; }

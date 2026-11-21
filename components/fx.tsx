@@ -14,6 +14,8 @@ export const scrollToSection = (id: string, smooth = true) => {
 /* Fades + slides children in the first time they scroll into view. */
 export const Reveal: React.FC<{ children: React.ReactNode; delay?: number; className?: string }> = ({ children, delay = 0, className = '' }) => {
   const ref = useRef<HTMLDivElement>(null);
+  // on phones/tablets cards stack in one column, so skip the stagger and start the fade before they scroll in
+  const [small] = useState(() => typeof window !== 'undefined' && window.innerWidth < 1024);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -22,12 +24,12 @@ export const Reveal: React.FC<{ children: React.ReactNode; delay?: number; class
         el.classList.add('is-visible');
         io.disconnect();
       }
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    }, small ? { threshold: 0, rootMargin: '0px 0px 15% 0px' } : { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
     io.observe(el);
     return () => io.disconnect();
-  }, []);
+  }, [small]);
   return (
-    <div ref={ref} className={`reveal ${className}`} style={{ transitionDelay: `${delay}ms` }}>
+    <div ref={ref} className={`reveal ${className}`} style={{ transitionDelay: `${small ? 0 : delay}ms` }}>
       {children}
     </div>
   );
@@ -62,28 +64,40 @@ export const MoleculeField: React.FC<{ className?: string }> = ({ className = ''
     // ring: 0 = plain atom, 1 = benzene-style ring, 2 = fused double ring
     type Node = { x: number; y: number; vx: number; vy: number; r: number; ring: 0 | 1 | 2; angle: number; spin: number };
     let nodes: Node[] = [];
+    let link = 130;
+
+    const makeNode = (): Node => {
+      const roll = Math.random();
+      return {
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35,
+        r: Math.random() * 1.8 + 1,
+        ring: roll < 0.06 ? 2 : roll < 0.2 ? 1 : 0,
+        angle: Math.random() * Math.PI,
+        spin: (Math.random() - 0.5) * 0.004,
+      };
+    };
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      w = canvas.clientWidth;
-      h = canvas.clientHeight;
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
+      const nw = canvas.clientWidth, nh = canvas.clientHeight;
+      if (!nw || !nh || (nw === w && nh === h)) return;
+      const small = nw < 1024;
+      // lighter rendering on phones/tablets
+      const dpr = Math.min(window.devicePixelRatio || 1, small ? 1.5 : 2);
+      canvas.width = nw * dpr;
+      canvas.height = nh * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const count = Math.round(Math.min(130, (w * h) / 10000));
-      nodes = Array.from({ length: count }, () => {
-        const roll = Math.random();
-        return {
-          x: Math.random() * w,
-          y: Math.random() * h,
-          vx: (Math.random() - 0.5) * 0.35,
-          vy: (Math.random() - 0.5) * 0.35,
-          r: Math.random() * 1.8 + 1,
-          ring: roll < 0.06 ? 2 : roll < 0.2 ? 1 : 0,
-          angle: Math.random() * Math.PI,
-          spin: (Math.random() - 0.5) * 0.004,
-        };
-      });
+      // keep the existing molecules and stretch their positions instead of scattering new ones
+      if (w && h) {
+        for (const n of nodes) { n.x *= nw / w; n.y *= nh / h; }
+      }
+      w = nw; h = nh;
+      link = small ? 110 : 130;
+      const count = Math.round(Math.min(small ? 60 : 130, (w * h) / (small ? 9000 : 10000)));
+      while (nodes.length < count) nodes.push(makeNode());
+      if (nodes.length > count) nodes.length = count;
     };
 
     const hexagon = (x: number, y: number, size: number, rot: number, inner: boolean) => {
@@ -103,7 +117,6 @@ export const MoleculeField: React.FC<{ className?: string }> = ({ className = ''
 
     const draw = () => {
       ctx.clearRect(0, 0, w, h);
-      const link = 130;
       for (let i = 0; i < nodes.length; i++) {
         const a = nodes[i];
         for (let j = i + 1; j < nodes.length; j++) {
@@ -158,6 +171,21 @@ export const MoleculeField: React.FC<{ className?: string }> = ({ className = ''
     };
     const onLeave = () => { mouse.x = mouse.y = -9999; };
 
+    // touch: molecules reach toward the finger, then let go shortly after it lifts
+    let touchTimer = 0;
+    const onTouch = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (!t) return;
+      clearTimeout(touchTimer);
+      const r = canvas.getBoundingClientRect();
+      mouse.x = t.clientX - r.left;
+      mouse.y = t.clientY - r.top;
+    };
+    const onTouchEnd = () => {
+      clearTimeout(touchTimer);
+      touchTimer = window.setTimeout(onLeave, 700);
+    };
+
     resize();
     const ro = new ResizeObserver(() => { resize(); if (!running || prefersReducedMotion()) draw(); });
     ro.observe(canvas);
@@ -176,13 +204,20 @@ export const MoleculeField: React.FC<{ className?: string }> = ({ className = ''
     io.observe(canvas);
     window.addEventListener('mousemove', onMove);
     document.addEventListener('mouseleave', onLeave);
+    window.addEventListener('touchstart', onTouch, { passive: true });
+    window.addEventListener('touchmove', onTouch, { passive: true });
+    window.addEventListener('touchend', onTouchEnd, { passive: true });
     return () => {
       running = false;
       cancelAnimationFrame(raf);
+      clearTimeout(touchTimer);
       io.disconnect();
       ro.disconnect();
       window.removeEventListener('mousemove', onMove);
       document.removeEventListener('mouseleave', onLeave);
+      window.removeEventListener('touchstart', onTouch);
+      window.removeEventListener('touchmove', onTouch);
+      window.removeEventListener('touchend', onTouchEnd);
     };
   }, []);
 
@@ -202,7 +237,7 @@ export const BackgroundMolecules: React.FC = () => {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
   return (
-    <div ref={ref} className="fixed inset-0 z-0 pointer-events-none" aria-hidden="true">
+    <div ref={ref} className="fixed left-0 top-0 w-full h-screen z-0 pointer-events-none" style={{ height: '100lvh' }} aria-hidden="true">
       <MoleculeField className="w-full h-full" />
     </div>
   );
