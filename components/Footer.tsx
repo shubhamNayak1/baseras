@@ -13,10 +13,10 @@ const otherProducts = [
 
 const Footer: React.FC = () => {
   return (
-    <footer className="relative z-10 bg-ink/90 backdrop-blur-sm text-white pt-20 pb-10 border-t border-white/10">
+    <footer className="relative z-10 bg-ink/90 backdrop-blur-sm text-white pt-14 md:pt-20 pb-8 md:pb-10 border-t border-white/10">
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-5 gap-10 xl:gap-12 mb-16">
-          <div className="col-span-1 sm:col-span-3 xl:col-span-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-x-6 gap-y-8 sm:gap-10 xl:gap-12 mb-10 md:mb-16">
+          <div className="col-span-2 sm:col-span-3 xl:col-span-2">
             <button onClick={() => scrollToSection('top')} className="flex items-center space-x-2 mb-6 cursor-pointer text-left">
               <div className="p-2 bg-teal rounded-lg">
                 <Cpu className="w-5 h-5 text-white" />
@@ -33,8 +33,8 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h4 className="text-white font-bold mb-8 uppercase text-sm tracking-widest">Navigation</h4>
-            <ul className="space-y-4">
+            <h4 className="text-white font-bold mb-4 md:mb-8 uppercase text-sm tracking-widest">Navigation</h4>
+            <ul className="space-y-3 md:space-y-4">
               <li><button onClick={() => scrollToSection('products')} className={`${linkClass} cursor-pointer`}>Products</button></li>
               <li><button onClick={() => scrollToSection('about')} className={`${linkClass} cursor-pointer`}>About Us</button></li>
               <li><button onClick={() => scrollToSection('contact')} className={`${linkClass} cursor-pointer`}>Book a Demo</button></li>
@@ -42,17 +42,17 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h4 className="text-white font-bold mb-8 uppercase text-sm tracking-widest">Other Products</h4>
-            <ul className="space-y-4">
+            <h4 className="text-white font-bold mb-4 md:mb-8 uppercase text-sm tracking-widest">Other Products</h4>
+            <ul className="space-y-3 md:space-y-4">
               {otherProducts.map(o => (
                 <li key={o.link}><a href={o.link} target="_blank" rel="noopener noreferrer" className={linkClass}>{o.title}</a></li>
               ))}
             </ul>
           </div>
 
-          <div>
-            <h4 className="text-white font-bold mb-8 uppercase text-sm tracking-widest">Support</h4>
-            <ul className="space-y-4">
+          <div className="col-span-2 sm:col-span-1">
+            <h4 className="text-white font-bold mb-4 md:mb-8 uppercase text-sm tracking-widest">Support</h4>
+            <ul className="space-y-3 md:space-y-4">
               <li className="flex items-center space-x-3 text-slate-400">
                 <Mail className="w-4 h-4 text-skyblue" />
                 <span className="font-medium">info@baserastech.com</span>

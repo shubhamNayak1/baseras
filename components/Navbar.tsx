@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-import { scrollToSection } from './fx';
+import { scrollToSection, useIntroDone } from './fx';
 
 const navLinks = [
   { name: 'Products', id: 'products' },
@@ -12,6 +12,14 @@ const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState('');
+  // slide the navbar in shortly after the opening intro finishes
+  const introDone = useIntroDone();
+  const [navIn, setNavIn] = useState(introDone);
+  useEffect(() => {
+    if (!introDone || navIn) return;
+    const t = setTimeout(() => setNavIn(true), 700);
+    return () => clearTimeout(t);
+  }, [introDone, navIn]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,7 +43,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${
+    <nav className={`fixed w-full z-50 transition-all duration-500 ${navIn ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'} ${
       scrolled || isOpen
         ? 'bg-ink/75 backdrop-blur-xl border-b border-white/10 py-4 shadow-xl'
         : 'bg-transparent border-b border-transparent py-6'

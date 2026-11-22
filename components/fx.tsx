@@ -1,7 +1,32 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- Opening intro state ----------
+   The intro plays once per browser session, only on the plain home URL, and never with reduced motion.
+   Everything that animates on load waits for intro.phase === 'done'. */
+const INTRO_KEY = 'bt-intro-seen';
+const shouldPlayIntro = () => {
+  if (typeof window === 'undefined' || prefersReducedMotion()) return false;
+  const route = window.location.hash.replace(/^#/, '');
+  if (route && route !== '/') return false;
+  try { if (sessionStorage.getItem(INTRO_KEY)) return false; } catch { /* storage blocked: still play */ }
+  return true;
+};
+let introPhase: 'playing' | 'done' = shouldPlayIntro() ? 'playing' : 'done';
+const introListeners = new Set<() => void>();
+export const intro = {
+  get phase() { return introPhase; },
+  finish() {
+    if (introPhase === 'done') return;
+    introPhase = 'done';
+    try { sessionStorage.setItem(INTRO_KEY, '1'); } catch { /* ignore */ }
+    introListeners.forEach(l => l());
+  },
+  subscribe(l: () => void) { introListeners.add(l); return () => { introListeners.delete(l); }; },
+};
+export const useIntroDone = () => useSyncExternalStore(intro.subscribe, () => intro.phase === 'done');
 
 /* Smooth-scrolls to a section on the single page, leaving room for the fixed navbar. */
 export const scrollToSection = (id: string, smooth = true) => {
@@ -11,14 +36,15 @@ export const scrollToSection = (id: string, smooth = true) => {
   window.scrollTo({ top, behavior: smooth && !prefersReducedMotion() ? 'smooth' : 'auto' });
 };
 
-/* Fades + slides children in the first time they scroll into view. */
-export const Reveal: React.FC<{ children: React.ReactNode; delay?: number; className?: string }> = ({ children, delay = 0, className = '' }) => {
+/* Fades + slides children in the first time they scroll into view (after the opening intro). */
+export const Reveal: React.FC<{ children: React.ReactNode; delay?: number; className?: string; keepDelay?: boolean }> = ({ children, delay = 0, className = '', keepDelay = false }) => {
   const ref = useRef<HTMLDivElement>(null);
+  const introDone = useIntroDone();
   // on phones/tablets cards stack in one column, so skip the stagger and start the fade before they scroll in
   const [small] = useState(() => typeof window !== 'undefined' && window.innerWidth < 1024);
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || !introDone) return;
     const io = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         el.classList.add('is-visible');
@@ -27,11 +53,43 @@ export const Reveal: React.FC<{ children: React.ReactNode; delay?: number; class
     }, small ? { threshold: 0, rootMargin: '0px 0px 15% 0px' } : { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
     io.observe(el);
     return () => io.disconnect();
-  }, [small]);
+  }, [small, introDone]);
   return (
-    <div ref={ref} className={`reveal ${className}`} style={{ transitionDelay: `${small ? 0 : delay}ms` }}>
+    <div ref={ref} className={`reveal ${className}`} style={{ transitionDelay: `${small && !keepDelay ? 0 : delay}ms` }}>
       {children}
     </div>
+  );
+};
+
+/* Text that "decodes" from random characters into the real words, left to right. */
+const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&@$';
+const scramble = (text: string, revealed: number) =>
+  text.split('').map((c, i) => (i < revealed || c === ' ' || c === '.') ? c : GLYPHS[Math.floor(Math.random() * GLYPHS.length)]).join('');
+
+export const ScrambleText: React.FC<{ text: string; start: boolean; delay?: number; className?: string }> = ({ text, start, delay = 0, className = '' }) => {
+  const [out, setOut] = useState(() => (prefersReducedMotion() ? text : scramble(text, 0)));
+  useEffect(() => {
+    if (prefersReducedMotion()) { setOut(text); return; }
+    if (!start) return;
+    let raf = 0, lastTick = -1;
+    const t0 = performance.now() + delay, dur = 1400;
+    const tick = (now: number) => {
+      const p = (now - t0) / dur;
+      if (p >= 1) { setOut(text); return; }
+      const step = Math.floor(now / 45); // change the random letters ~22 times a second
+      if (step !== lastTick) { lastTick = step; setOut(scramble(text, Math.max(0, Math.floor(p * text.length)))); }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [start, text, delay]);
+  return (
+    <span className="relative inline-block">
+      {/* the real text reserves the space so nothing jumps while letters change */}
+      <span className="invisible">{text}</span>
+      {/* styling (e.g. the gradient) goes on the visible layer: background-clip text doesn't reach positioned children */}
+      <span className={`absolute inset-0 ${className}`} aria-hidden="true">{out}</span>
+    </span>
   );
 };
 
@@ -65,6 +123,10 @@ export const MoleculeField: React.FC<{ className?: string }> = ({ className = ''
     type Node = { x: number; y: number; vx: number; vy: number; r: number; ring: 0 | 1 | 2; angle: number; spin: number };
     let nodes: Node[] = [];
     let link = 130;
+    // burst: -1 = waiting behind the intro (all molecules gathered in the centre), number = start time, null = normal
+    let burstStart: number | null = intro.phase === 'playing' ? -1 : null;
+    const onBurst = () => { if (burstStart === -1) burstStart = performance.now(); };
+    const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
 
     const makeNode = (): Node => {
       const roll = Math.random();
@@ -117,10 +179,25 @@ export const MoleculeField: React.FC<{ className?: string }> = ({ className = ''
 
     const draw = () => {
       ctx.clearRect(0, 0, w, h);
+      // during the burst, molecules fly out from the centre to their places
+      let k = 1;
+      if (burstStart === -1) k = 0;
+      else if (burstStart !== null) {
+        const t = (performance.now() - burstStart) / 1600;
+        if (t >= 1) burstStart = null; else k = easeOut(t);
+      }
+      const cx = w / 2, cy = h / 2;
+      const P = nodes.map(n => ({ x: cx + (n.x - cx) * k, y: cy + (n.y - cy) * k }));
+      if (k < 1 && k > 0) {
+        // shockwave ring
+        ctx.strokeStyle = `rgba(56,189,248,${0.5 * (1 - k)})`;
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(cx, cy, k * Math.max(w, h) * 0.6, 0, Math.PI * 2); ctx.stroke();
+      }
       for (let i = 0; i < nodes.length; i++) {
-        const a = nodes[i];
+        const a = P[i];
         for (let j = i + 1; j < nodes.length; j++) {
-          const b = nodes[j];
+          const b = P[j];
           const d = Math.hypot(a.x - b.x, a.y - b.y);
           if (d < link) {
             ctx.strokeStyle = `rgba(56,189,248,${0.22 * (1 - d / link)})`;
@@ -134,7 +211,8 @@ export const MoleculeField: React.FC<{ className?: string }> = ({ className = ''
           ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
         }
       }
-      for (const n of nodes) {
+      for (let i = 0; i < nodes.length; i++) {
+        const n = { ...nodes[i], ...P[i] };
         ctx.fillStyle = n.ring ? 'rgba(31,182,166,.9)' : 'rgba(148,197,255,.75)';
         ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fill();
         if (n.ring) {
@@ -204,6 +282,7 @@ export const MoleculeField: React.FC<{ className?: string }> = ({ className = ''
     io.observe(canvas);
     window.addEventListener('mousemove', onMove);
     document.addEventListener('mouseleave', onLeave);
+    window.addEventListener('baseras:burst', onBurst);
     window.addEventListener('touchstart', onTouch, { passive: true });
     window.addEventListener('touchmove', onTouch, { passive: true });
     window.addEventListener('touchend', onTouchEnd, { passive: true });
@@ -215,6 +294,7 @@ export const MoleculeField: React.FC<{ className?: string }> = ({ className = ''
       ro.disconnect();
       window.removeEventListener('mousemove', onMove);
       document.removeEventListener('mouseleave', onLeave);
+      window.removeEventListener('baseras:burst', onBurst);
       window.removeEventListener('touchstart', onTouch);
       window.removeEventListener('touchmove', onTouch);
       window.removeEventListener('touchend', onTouchEnd);
@@ -256,25 +336,67 @@ const EVENTS = [
 
 const clock = (d: Date) => d.toTimeString().slice(0, 8);
 
+type Row = (typeof EVENTS)[number] & { id: number; time: string };
+const initialRows = (): Row[] => {
+  const now = Date.now();
+  return EVENTS.slice(0, 4).map((e, i) => ({ ...e, id: i, time: clock(new Date(now - (4 - i) * 47000)) }));
+};
+
 export const LiveConsole: React.FC = () => {
-  const [rows, setRows] = useState(() => {
-    const now = Date.now();
-    return EVENTS.slice(0, 4).map((e, i) => ({ ...e, id: i, time: clock(new Date(now - (4 - i) * 47000)) }));
-  });
+  const ref = useRef<HTMLDivElement>(null);
+  const introDone = useIntroDone();
+  const [reduced] = useState(prefersReducedMotion);
+  // idle → boot ("Connecting to audit trail…" ✓) → live (entries stream in)
+  const [phase, setPhase] = useState<'idle' | 'boot' | 'live'>(reduced ? 'live' : 'idle');
+  const [typed, setTyped] = useState('');
+  const [connected, setConnected] = useState(false);
+  const [rows, setRows] = useState<Row[]>(() => (reduced ? initialRows() : []));
+
+  // boot once the console is on screen (on phones that's when you scroll to it)
+  useEffect(() => {
+    if (phase !== 'idle' || !introDone) return;
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { setPhase('boot'); io.disconnect(); }
+    }, { threshold: 0.3 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [phase, introDone]);
 
   useEffect(() => {
-    if (prefersReducedMotion()) return;
-    let i = 4;
-    const t = setInterval(() => {
-      const e = EVENTS[i % EVENTS.length];
-      setRows(prev => [...prev.slice(-4), { ...e, id: i, time: clock(new Date()) }]);
+    if (phase !== 'boot') return;
+    const msg = 'Connecting to audit trail…';
+    const timers: number[] = [];
+    let i = 0;
+    const typer = window.setInterval(() => {
       i++;
-    }, 2200);
-    return () => clearInterval(t);
-  }, []);
+      setTyped(msg.slice(0, i));
+      if (i >= msg.length) {
+        clearInterval(typer);
+        timers.push(window.setTimeout(() => setConnected(true), 400));
+        timers.push(window.setTimeout(() => setPhase('live'), 1300));
+      }
+    }, 45);
+    return () => { clearInterval(typer); timers.forEach(clearTimeout); };
+  }, [phase]);
+
+  useEffect(() => {
+    if (phase !== 'live' || reduced) return;
+    let i = 0;
+    const add = () => {
+      const e = EVENTS[i % EVENTS.length];
+      const id = i++;
+      setRows(prev => [...prev.slice(-4), { ...e, id, time: clock(new Date()) }]);
+    };
+    // first entries arrive quickly, then one every 2.2 s
+    const timers = [0, 1, 2, 3].map(k => window.setTimeout(add, k * 350));
+    const iv = window.setInterval(add, 2200);
+    return () => { timers.forEach(clearTimeout); clearInterval(iv); };
+  }, [phase, reduced]);
 
   return (
-    <div className="glass !bg-deep/85 rounded-3xl overflow-hidden shadow-2xl shadow-teal/10 text-left relative">
+    <div ref={ref} className="glass !bg-deep/85 rounded-3xl overflow-hidden shadow-2xl shadow-teal/10 text-left relative">
       <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-skyblue/10 to-transparent scanline pointer-events-none" />
       <div className="flex items-center justify-between px-5 py-3 border-b border-white/10">
         <div className="flex items-center gap-1.5">
@@ -288,7 +410,18 @@ export const LiveConsole: React.FC = () => {
         </span>
       </div>
       <div className="p-4 space-y-2 min-h-[290px]">
-        {rows.map(r => (
+        {phase !== 'live' && (
+          <div className="px-2 pt-2 space-y-2 font-mono text-sm">
+            <div className="text-slate-300">
+              <span className="text-teal mr-2">›</span>{typed}
+              {!connected && <span className="caret text-teal">▍</span>}
+            </div>
+            {connected && (
+              <div className="row-in text-emerald-300">✓ Connected · QMS · eLogbook · Field Pharma</div>
+            )}
+          </div>
+        )}
+        {phase === 'live' && rows.map(r => (
           <div key={r.id} className="row-in flex items-center gap-3 rounded-xl bg-white/[0.03] border border-white/5 px-3 py-2.5">
             <span className="font-mono text-[11px] text-slate-500 shrink-0">{r.time}</span>
             <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md shrink-0 ${r.color}`}>{r.mod}</span>

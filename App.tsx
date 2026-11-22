@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import ScrollToTop from './components/ScrollToTop';
 import { BackgroundMolecules } from './components/fx';
+import Intro from './components/Intro';
 
 const App: React.FC = () => {
   return (
@@ -12,6 +13,7 @@ const App: React.FC = () => {
       <ScrollToTop />
       <div className="flex flex-col min-h-screen bg-ink text-white selection:bg-teal selection:text-white">
         <BackgroundMolecules />
+        <Intro />
         <Navbar />
         <main className="flex-grow relative z-10">
           <Routes>
